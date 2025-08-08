@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import { FiTrendingUp, FiUsers, FiBrain, FiLink } from 'react-icons/fi';
+import { FiTrendingUp, FiUsers, FiCpu, FiLink } from 'react-icons/fi';
 
 const DashboardContainer = styled.div`
   padding: 24px;
@@ -164,7 +164,7 @@ const DashboardPage = () => {
 
   const stats = [
     {
-      icon: FiBrain,
+      icon: FiCpu,
       value: user?.statistics?.profileCompletion || 87,
       label: 'Profile Completion',
       suffix: '%'
@@ -210,7 +210,7 @@ const DashboardPage = () => {
 
   const recentActivity = [
     {
-      icon: FiBrain,
+      icon: FiCpu,
       title: 'Personality analysis updated',
       time: '2 hours ago'
     },

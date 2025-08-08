@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import { FiArrowRight, FiUsers, FiBrain, FiLink, FiTrendingUp } from 'react-icons/fi';
+import { FiArrowRight, FiUsers, FiCpu, FiLink, FiTrendingUp } from 'react-icons/fi';
 
 const LandingContainer = styled.div`
   min-height: 100vh;
@@ -201,7 +201,7 @@ const NavButton = styled(Link)`
 
 const features = [
   {
-    icon: FiBrain,
+    icon: FiCpu,
     title: 'AI Personality Analysis',
     description: 'Advanced AI algorithms analyze your behavior patterns and create detailed personality profiles.'
   },
