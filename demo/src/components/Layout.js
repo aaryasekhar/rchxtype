@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { 
   FiHome, 
   FiUser, 
-  FiBrain, 
+  FiCpu, 
   FiLink, 
   FiUsers, 
   FiMessageSquare, 
@@ -208,7 +208,7 @@ const Overlay = styled(motion.div)`
 const navigationItems = [
   { path: '/dashboard', label: 'Dashboard', icon: FiHome },
   { path: '/profile', label: 'Profile', icon: FiUser },
-  { path: '/personality', label: 'Personality', icon: FiBrain },
+  { path: '/personality', label: 'Personality', icon: FiCpu },
   { path: '/integrations', label: 'Integrations', icon: FiLink },
   { path: '/matching', label: 'Matching', icon: FiUsers },
   { path: '/connections', label: 'Connections', icon: FiMessageSquare },
