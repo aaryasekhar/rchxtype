@@ -29,7 +29,7 @@ const Logo = styled.h1`
   font-weight: 800;
   text-align: center;
   margin-bottom: 32px;
-  background: ${({ theme }) => theme.gradients.primary};
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -96,10 +96,10 @@ const PasswordToggle = styled.button`
 const LoginButton = styled.button`
   width: 100%;
   padding: 12px 24px;
-  background: ${({ theme }) => theme.gradients.primary};
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;

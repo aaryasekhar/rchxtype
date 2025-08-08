@@ -27,7 +27,7 @@ const Logo = styled.h1`
   font-weight: 800;
   text-align: center;
   margin-bottom: 32px;
-  background: ${({ theme }) => theme.gradients.primary};
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
