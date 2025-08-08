@@ -9,11 +9,9 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
-import ProfilePage from './pages/ProfilePage';
-import PersonalityPage from './pages/PersonalityPage';
-import IntegrationsPage from './pages/IntegrationsPage';
 import MatchingPage from './pages/MatchingPage';
 import ConnectionsPage from './pages/ConnectionsPage';
+import ForYouPage from './pages/ForYouPage';
 
 function App() {
   const { user, loading } = useAuth();
@@ -49,30 +47,6 @@ function App() {
         </ProtectedRoute>
       } />
       
-      <Route path="/profile" element={
-        <ProtectedRoute>
-          <Layout>
-            <ProfilePage />
-          </Layout>
-        </ProtectedRoute>
-      } />
-      
-      <Route path="/personality" element={
-        <ProtectedRoute>
-          <Layout>
-            <PersonalityPage />
-          </Layout>
-        </ProtectedRoute>
-      } />
-      
-      <Route path="/integrations" element={
-        <ProtectedRoute>
-          <Layout>
-            <IntegrationsPage />
-          </Layout>
-        </ProtectedRoute>
-      } />
-      
       <Route path="/matching" element={
         <ProtectedRoute>
           <Layout>
@@ -85,6 +59,14 @@ function App() {
         <ProtectedRoute>
           <Layout>
             <ConnectionsPage />
+          </Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/for-you" element={
+        <ProtectedRoute>
+          <Layout>
+            <ForYouPage />
           </Layout>
         </ProtectedRoute>
       } />

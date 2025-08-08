@@ -13,217 +13,268 @@ import {
   FiMenu, 
   FiX,
   FiLogOut,
-  FiSettings
+  FiSettings,
+  FiHeart,
+  FiChevronLeft,
+  FiChevronRight
 } from 'react-icons/fi';
 
 const LayoutContainer = styled.div`
   display: flex;
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.background[950]};
+  background: #f8f9fa;
 `;
 
 const Sidebar = styled(motion.div)`
-  width: 280px;
-  background: ${({ theme }) => theme.colors.background[900]};
-  border-right: 1px solid ${({ theme }) => theme.colors.border.dark};
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  height: 100vh;
+  width: ${({ collapsed }) => collapsed ? '80px' : '280px'};
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease;
+  position: relative;
   z-index: 1000;
-
-  @media (max-width: 768px) {
-    transform: translateX(${({ isOpen }) => isOpen ? '0' : '-100%'});
-    transition: transform 0.3s ease;
-  }
 `;
 
 const SidebarHeader = styled.div`
   padding: 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border.dark};
-`;
-
-const Logo = styled.h1`
-  font-size: 24px;
-  font-weight: 800;
-  color: ${({ theme }) => theme.colors.primary[500]};
-  margin: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-`;
-
-const NavMenu = styled.nav`
-  flex: 1;
-  padding: 16px 0;
-`;
-
-const NavItem = styled(motion.div)`
-  margin: 4px 16px;
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  overflow: hidden;
-`;
-
-const NavLink = styled.div`
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  color: ${({ theme, active }) => active ? theme.colors.primary[500] : theme.colors.text[300]};
-  background: ${({ theme, active }) => active ? theme.colors.primary[500] + '20' : 'transparent'};
-  text-decoration: none;
-  font-weight: ${({ active }) => active ? 600 : 500};
+  justify-content: space-between;
+`;
+
+const Logo = styled.div`
+  font-size: 24px;
+  font-weight: 900;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const LogoIcon = styled.div`
+  width: 32px;
+  height: 32px;
+  background: #000000;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+`;
+
+const ToggleButton = styled.button`
+  background: none;
+  border: none;
+  color: #666666;
   cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background: ${({ theme, active }) => active ? theme.colors.primary[500] + '30' : theme.colors.background[800]};
-    color: ${({ theme, active }) => active ? theme.colors.primary[400] : theme.colors.text[200]};
+    background: rgba(0, 0, 0, 0.05);
+    color: #000000;
   }
 `;
 
+const Navigation = styled.nav`
+  padding: 24px 0;
+`;
+
+const NavList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const NavItem = styled.li`
+  margin: 0;
+`;
+
+const NavLink = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  color: ${({ active }) => active ? '#000000' : '#666666'};
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  font-weight: ${({ active }) => active ? '600' : '500'};
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #000000;
+  }
+
+  ${({ active }) => active && `
+    background: rgba(0, 0, 0, 0.05);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #000000;
+    }
+  `}
+`;
+
 const NavIcon = styled.div`
-  margin-right: 12px;
-  font-size: 18px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
+const NavText = styled.span`
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: ${({ collapsed }) => collapsed ? 0 : 1};
+  transition: opacity 0.2s ease;
 `;
 
 const UserSection = styled.div`
-  padding: 16px;
-  border-top: 1px solid ${({ theme }) => theme.colors.border.dark};
+  padding: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: auto;
 `;
 
 const UserInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 16px;
 `;
 
 const UserAvatar = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 12px;
   object-fit: cover;
+  border: 2px solid rgba(0, 0, 0, 0.1);
 `;
 
 const UserDetails = styled.div`
   flex: 1;
+  opacity: ${({ collapsed }) => collapsed ? 0 : 1};
+  transition: opacity 0.2s ease;
 `;
 
 const UserName = styled.div`
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.text[100]};
+  color: #000000;
   font-size: 14px;
 `;
 
 const UserEmail = styled.div`
   font-size: 12px;
-  color: ${({ theme }) => theme.colors.text[400]};
+  color: #666666;
+  margin-top: 2px;
 `;
 
 const LogoutButton = styled.button`
   width: 100%;
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #666666;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
-  background: ${({ theme }) => theme.colors.status.error + '20'};
-  color: ${({ theme }) => theme.colors.status.error};
-  border: 1px solid ${({ theme }) => theme.colors.status.error + '40'};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
+  gap: 8px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.status.error + '30'};
+    background: rgba(0, 0, 0, 0.05);
+    color: #000000;
   }
+
+  opacity: ${({ collapsed }) => collapsed ? 0 : 1};
+  transition: opacity 0.2s ease;
 `;
 
 const MainContent = styled.main`
   flex: 1;
-  margin-left: 280px;
-  display: flex;
-  flex-direction: column;
-
-  @media (max-width: 768px) {
-    margin-left: 0;
-  }
+  background: #f8f9fa;
+  overflow-y: auto;
 `;
 
 const Header = styled.header`
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
-  background: ${({ theme }) => theme.colors.background[900]};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border.dark};
   position: sticky;
   top: 0;
   z-index: 100;
 `;
 
-const PageTitle = styled.h2`
-  font-size: 24px;
+const PageTitle = styled.h1`
+  font-size: 28px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.text[100]};
+  color: #000000;
   margin: 0;
 `;
 
-const MobileMenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.colors.text[300]};
-  font-size: 24px;
-  cursor: pointer;
-  padding: 8px;
+const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
 
-  @media (max-width: 768px) {
-    display: block;
+const ActionButton = styled.button`
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #666666;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+    color: #000000;
+    border-color: rgba(0, 0, 0, 0.2);
   }
 `;
 
 const Content = styled.div`
-  flex: 1;
-  padding: 24px;
-  overflow-y: auto;
+  padding: 32px;
 `;
-
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  display: none;
-
-  @media (max-width: 768px) {
-    display: ${({ isOpen }) => isOpen ? 'block' : 'none'};
-  }
-`;
-
-const navigationItems = [
-  { path: '/dashboard', label: 'Dashboard', icon: FiHome },
-  { path: '/profile', label: 'Profile', icon: FiUser },
-  { path: '/personality', label: 'Personality', icon: FiCpu },
-  { path: '/integrations', label: 'Integrations', icon: FiLink },
-  { path: '/matching', label: 'Matching', icon: FiUsers },
-  { path: '/connections', label: 'Connections', icon: FiMessageSquare },
-];
 
 const Layout = ({ children }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const handleNavigation = (path) => {
-    navigate(path);
-    setIsSidebarOpen(false);
-  };
+  const navigationItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: FiHome },
+    { path: '/matching', label: 'Matching', icon: FiUsers },
+    { path: '/connections', label: 'Connections', icon: FiMessageSquare },
+    { path: '/for-you', label: 'For You', icon: FiHeart },
+  ];
 
   const handleLogout = () => {
     logout();
@@ -232,74 +283,83 @@ const Layout = ({ children }) => {
 
   const getPageTitle = () => {
     const currentItem = navigationItems.find(item => item.path === location.pathname);
-    return currentItem ? currentItem.label : 'RCHXTYPE';
+    return currentItem ? currentItem.label : 'Dashboard';
   };
 
   return (
     <LayoutContainer>
-      <Overlay 
-        isOpen={isSidebarOpen} 
-        onClick={() => setIsSidebarOpen(false)}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isSidebarOpen ? 1 : 0 }}
-        transition={{ duration: 0.2 }}
-      />
-      
-      <Sidebar
-        initial={{ x: -280 }}
-        animate={{ x: 0 }}
-        transition={{ duration: 0.3 }}
-        isOpen={isSidebarOpen}
-      >
+      <Sidebar collapsed={sidebarCollapsed}>
         <SidebarHeader>
-          <Logo>RCHXTYPE</Logo>
+          <Logo>
+            <LogoIcon>R</LogoIcon>
+            <AnimatePresence>
+              {!sidebarCollapsed && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  RCHXTYPE
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </Logo>
+          <ToggleButton onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
+            {sidebarCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
+          </ToggleButton>
         </SidebarHeader>
 
-        <NavMenu>
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            
-            return (
-              <NavItem key={item.path}>
-                <NavLink 
-                  active={isActive}
-                  onClick={() => handleNavigation(item.path)}
-                >
-                  <NavIcon>
-                    <Icon />
-                  </NavIcon>
-                  {item.label}
-                </NavLink>
-              </NavItem>
-            );
-          })}
-        </NavMenu>
+        <Navigation>
+          <NavList>
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              
+              return (
+                <NavItem key={item.path}>
+                  <NavLink
+                    active={isActive}
+                    onClick={() => navigate(item.path)}
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <NavIcon>
+                      <Icon />
+                    </NavIcon>
+                    <NavText collapsed={sidebarCollapsed}>{item.label}</NavText>
+                  </NavLink>
+                </NavItem>
+              );
+            })}
+          </NavList>
+        </Navigation>
 
         <UserSection>
           <UserInfo>
-            <UserAvatar src={user?.profile?.avatar || 'https://via.placeholder.com/40'} alt="User" />
-            <UserDetails>
+            <UserAvatar src={user?.profile?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'} alt="Profile" />
+            <UserDetails collapsed={sidebarCollapsed}>
               <UserName>{user?.firstName} {user?.lastName}</UserName>
               <UserEmail>{user?.email}</UserEmail>
             </UserDetails>
           </UserInfo>
-          <LogoutButton onClick={handleLogout}>
-            <FiLogOut style={{ marginRight: 8 }} />
-            Logout
+          <LogoutButton collapsed={sidebarCollapsed} onClick={handleLogout}>
+            <FiLogOut />
+            {!sidebarCollapsed && 'Logout'}
           </LogoutButton>
         </UserSection>
       </Sidebar>
 
       <MainContent>
         <Header>
-          <MobileMenuButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-            {isSidebarOpen ? <FiX /> : <FiMenu />}
-          </MobileMenuButton>
           <PageTitle>{getPageTitle()}</PageTitle>
-          <div style={{ width: 40 }} /> {/* Spacer for centering */}
+          <HeaderActions>
+            <ActionButton>
+              <FiSettings />
+              Settings
+            </ActionButton>
+          </HeaderActions>
         </Header>
-        
         <Content>
           {children}
         </Content>
