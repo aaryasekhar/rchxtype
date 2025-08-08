@@ -27,7 +27,7 @@ const HeroSection = styled.section`
     left: 0;
     right: 0;
     bottom: 0;
-    background: ${({ theme }) => theme.gradients.dark};
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
     opacity: 0.8;
     z-index: 1;
   }
@@ -45,7 +45,7 @@ const HeroTitle = styled(motion.h1)`
   font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 900;
   margin-bottom: 24px;
-  background: ${({ theme }) => theme.gradients.primary};
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -63,7 +63,7 @@ const HeroSubtitle = styled(motion.p)`
 `;
 
 const CTAButton = styled(motion.button)`
-  background: ${({ theme }) => theme.gradients.primary};
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   padding: 16px 32px;
@@ -126,7 +126,7 @@ const FeatureCard = styled(motion.div)`
 const FeatureIcon = styled.div`
   width: 80px;
   height: 80px;
-  background: ${({ theme }) => theme.gradients.primary};
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -167,7 +167,7 @@ const Navbar = styled.nav`
 const Logo = styled.div`
   font-size: 24px;
   font-weight: 800;
-  color: ${({ theme }) => theme.colors.primary[500]};
+  color: #0ea5e9;
 `;
 
 const NavButtons = styled.div`
