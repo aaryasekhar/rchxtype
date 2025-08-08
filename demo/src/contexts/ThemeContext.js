@@ -11,45 +11,35 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('dark');
-  const [systemTheme, setSystemTheme] = useState('dark');
-
-  useEffect(() => {
-    // Check for saved theme preference or default to dark
-    const savedTheme = localStorage.getItem('rchxtype_theme');
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-
-    // Check system theme preference
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    setSystemTheme(mediaQuery.matches ? 'dark' : 'light');
-
-    const handleSystemThemeChange = (e) => {
-      setSystemTheme(e.matches ? 'dark' : 'light');
-    };
-
-    mediaQuery.addEventListener('change', handleSystemThemeChange);
-
-    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
-  }, []);
+  const [theme, setTheme] = useState(() => {
+    // Check for saved theme preference or default to 'light'
+    const savedTheme = localStorage.getItem('rchxtype-theme');
+    return savedTheme || 'light';
+  });
 
   const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem('rchxtype_theme', newTheme);
+    localStorage.setItem('rchxtype-theme', newTheme);
   };
 
   const setThemeMode = (mode) => {
     setTheme(mode);
-    localStorage.setItem('rchxtype_theme', mode);
+    localStorage.setItem('rchxtype-theme', mode);
   };
+
+  // Update document body class when theme changes
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme';
+  }, [theme]);
 
   const value = {
     theme,
-    systemTheme,
     toggleTheme,
-    setThemeMode
+    setThemeMode,
+    isDark: theme === 'dark',
+    isLight: theme === 'light'
   };
 
   return (

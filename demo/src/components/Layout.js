@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { 
   FiHome, 
   FiUser, 
@@ -16,20 +17,26 @@ import {
   FiSettings,
   FiHeart,
   FiChevronLeft,
-  FiChevronRight
+  FiChevronRight,
+  FiMoon,
+  FiSun,
+  FiBell,
+  FiShield,
+  FiHelpCircle
 } from 'react-icons/fi';
 
 const LayoutContainer = styled.div`
   display: flex;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: ${({ theme }) => theme === 'dark' ? '#0a0a0a' : '#f8f9fa'};
+  transition: background 0.3s ease;
 `;
 
 const Sidebar = styled(motion.div)`
   width: ${({ collapsed }) => collapsed ? '80px' : '280px'};
-  background: rgba(255, 255, 255, 0.95);
+  background: ${({ theme }) => theme === 'dark' ? 'rgba(20, 20, 20, 0.95)' : 'rgba(255, 255, 255, 0.95)'};
   backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
   transition: width 0.3s ease;
   position: relative;
   z-index: 1000;
@@ -37,7 +44,7 @@ const Sidebar = styled(motion.div)`
 
 const SidebarHeader = styled.div`
   padding: 24px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46,7 +53,7 @@ const SidebarHeader = styled.div`
 const Logo = styled.div`
   font-size: 24px;
   font-weight: 900;
-  color: #000000;
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
   display: flex;
   align-items: center;
   gap: 12px;
@@ -55,19 +62,19 @@ const Logo = styled.div`
 const LogoIcon = styled.div`
   width: 32px;
   height: 32px;
-  background: #000000;
+  background: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: ${({ theme }) => theme === 'dark' ? '#000000' : '#ffffff'};
   font-weight: bold;
 `;
 
 const ToggleButton = styled.button`
   background: none;
   border: none;
-  color: #666666;
+  color: ${({ theme }) => theme === 'dark' ? '#666666' : '#666666'};
   cursor: pointer;
   padding: 8px;
   border-radius: 8px;
@@ -77,8 +84,8 @@ const ToggleButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #000000;
+    background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+    color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
   }
 `;
 
@@ -101,7 +108,7 @@ const NavLink = styled(motion.div)`
   align-items: center;
   gap: 16px;
   padding: 16px 24px;
-  color: ${({ active }) => active ? '#000000' : '#666666'};
+  color: ${({ active, theme }) => active ? (theme === 'dark' ? '#ffffff' : '#000000') : (theme === 'dark' ? '#666666' : '#666666')};
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -109,12 +116,12 @@ const NavLink = styled(motion.div)`
   font-weight: ${({ active }) => active ? '600' : '500'};
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #000000;
+    background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+    color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
   }
 
   ${({ active }) => active && `
-    background: rgba(0, 0, 0, 0.05);
+    background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
     
     &::before {
       content: '';
@@ -123,7 +130,7 @@ const NavLink = styled(motion.div)`
       top: 0;
       bottom: 0;
       width: 3px;
-      background: #000000;
+      background: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
     }
   `}
 `;
@@ -146,7 +153,7 @@ const NavText = styled.span`
 
 const UserSection = styled.div`
   padding: 24px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
   margin-top: auto;
 `;
 
@@ -162,7 +169,7 @@ const UserAvatar = styled.img`
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'};
 `;
 
 const UserDetails = styled.div`
@@ -173,21 +180,21 @@ const UserDetails = styled.div`
 
 const UserName = styled.div`
   font-weight: 600;
-  color: #000000;
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
   font-size: 14px;
 `;
 
 const UserEmail = styled.div`
   font-size: 12px;
-  color: #666666;
+  color: ${({ theme }) => theme === 'dark' ? '#666666' : '#666666'};
   margin-top: 2px;
 `;
 
 const LogoutButton = styled.button`
   width: 100%;
   background: none;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #666666;
+  border: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
+  color: ${({ theme }) => theme === 'dark' ? '#666666' : '#666666'};
   padding: 12px;
   border-radius: 8px;
   cursor: pointer;
@@ -199,8 +206,8 @@ const LogoutButton = styled.button`
   gap: 8px;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #000000;
+    background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+    color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
   }
 
   opacity: ${({ collapsed }) => collapsed ? 0 : 1};
@@ -209,14 +216,15 @@ const LogoutButton = styled.button`
 
 const MainContent = styled.main`
   flex: 1;
-  background: #f8f9fa;
+  background: ${({ theme }) => theme === 'dark' ? '#0a0a0a' : '#f8f9fa'};
   overflow-y: auto;
+  transition: background 0.3s ease;
 `;
 
 const Header = styled.header`
-  background: rgba(255, 255, 255, 0.95);
+  background: ${({ theme }) => theme === 'dark' ? 'rgba(20, 20, 20, 0.95)' : 'rgba(255, 255, 255, 0.95)'};
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
   padding: 20px 32px;
   display: flex;
   align-items: center;
@@ -224,13 +232,15 @@ const Header = styled.header`
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: all 0.3s ease;
 `;
 
 const PageTitle = styled.h1`
   font-size: 28px;
   font-weight: 700;
-  color: #000000;
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
   margin: 0;
+  transition: color 0.3s ease;
 `;
 
 const HeaderActions = styled.div`
@@ -240,9 +250,9 @@ const HeaderActions = styled.div`
 `;
 
 const ActionButton = styled.button`
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #666666;
+  background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.8)'};
+  border: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#666666'};
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -253,9 +263,9 @@ const ActionButton = styled.button`
   gap: 8px;
 
   &:hover {
-    background: rgba(255, 255, 255, 1);
-    color: #000000;
-    border-color: rgba(0, 0, 0, 0.2);
+    background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 1)'};
+    color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
+    border-color: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'};
   }
 `;
 
@@ -263,11 +273,157 @@ const Content = styled.div`
   padding: 32px;
 `;
 
+// Settings Modal Components
+const ModalOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+`;
+
+const SettingsModal = styled(motion.div)`
+  background: ${({ theme }) => theme === 'dark' ? 'rgba(30, 30, 30, 0.95)' : 'rgba(255, 255, 255, 0.95)'};
+  backdrop-filter: blur(20px);
+  border: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`;
+
+const ModalTitle = styled.h2`
+  font-size: 24px;
+  font-weight: 700;
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
+  margin: 0;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme === 'dark' ? '#666666' : '#666666'};
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+    color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
+  }
+`;
+
+const SettingsSection = styled.div`
+  margin-bottom: 32px;
+`;
+
+const SectionTitle = styled.h3`
+  font-size: 18px;
+  font-weight: 600;
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const SettingItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)'};
+  border: 1px solid ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+    border-color: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'};
+  }
+`;
+
+const SettingInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const SettingIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  background: ${({ theme }) => theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
+`;
+
+const SettingDetails = styled.div`
+  flex: 1;
+`;
+
+const SettingName = styled.div`
+  font-weight: 600;
+  color: ${({ theme }) => theme === 'dark' ? '#ffffff' : '#000000'};
+  margin-bottom: 4px;
+`;
+
+const SettingDescription = styled.div`
+  font-size: 12px;
+  color: ${({ theme }) => theme === 'dark' ? '#666666' : '#666666'};
+`;
+
+const ToggleSwitch = styled.button`
+  width: 48px;
+  height: 24px;
+  background: ${({ active, theme }) => active ? (theme === 'dark' ? '#ffffff' : '#000000') : (theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)')};
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: ${({ active }) => active ? '26px' : '2px'};
+    width: 20px;
+    height: 20px;
+    background: ${({ active, theme }) => active ? (theme === 'dark' ? '#000000' : '#ffffff') : (theme === 'dark' ? '#666666' : '#666666')};
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+`;
+
 const Layout = ({ children }) => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const navigationItems = [
     { path: '/dashboard', label: 'Dashboard', icon: FiHome },
@@ -286,12 +442,20 @@ const Layout = ({ children }) => {
     return currentItem ? currentItem.label : 'Dashboard';
   };
 
+  const handleSettingsClick = () => {
+    setSettingsOpen(true);
+  };
+
+  const handleCloseSettings = () => {
+    setSettingsOpen(false);
+  };
+
   return (
-    <LayoutContainer>
-      <Sidebar collapsed={sidebarCollapsed}>
-        <SidebarHeader>
-          <Logo>
-            <LogoIcon>R</LogoIcon>
+    <LayoutContainer theme={theme}>
+      <Sidebar collapsed={sidebarCollapsed} theme={theme}>
+        <SidebarHeader theme={theme}>
+          <Logo theme={theme}>
+            <LogoIcon theme={theme}>R</LogoIcon>
             <AnimatePresence>
               {!sidebarCollapsed && (
                 <motion.span
@@ -305,7 +469,7 @@ const Layout = ({ children }) => {
               )}
             </AnimatePresence>
           </Logo>
-          <ToggleButton onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
+          <ToggleButton onClick={() => setSidebarCollapsed(!sidebarCollapsed)} theme={theme}>
             {sidebarCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
           </ToggleButton>
         </SidebarHeader>
@@ -323,6 +487,7 @@ const Layout = ({ children }) => {
                     onClick={() => navigate(item.path)}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.98 }}
+                    theme={theme}
                   >
                     <NavIcon>
                       <Icon />
@@ -335,26 +500,26 @@ const Layout = ({ children }) => {
           </NavList>
         </Navigation>
 
-        <UserSection>
+        <UserSection theme={theme}>
           <UserInfo>
-            <UserAvatar src={user?.profile?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'} alt="Profile" />
-            <UserDetails collapsed={sidebarCollapsed}>
-              <UserName>{user?.firstName} {user?.lastName}</UserName>
-              <UserEmail>{user?.email}</UserEmail>
+            <UserAvatar src={user?.profile?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'} alt="Profile" theme={theme} />
+            <UserDetails collapsed={sidebarCollapsed} theme={theme}>
+              <UserName theme={theme}>{user?.firstName} {user?.lastName}</UserName>
+              <UserEmail theme={theme}>{user?.email}</UserEmail>
             </UserDetails>
           </UserInfo>
-          <LogoutButton collapsed={sidebarCollapsed} onClick={handleLogout}>
+          <LogoutButton collapsed={sidebarCollapsed} onClick={handleLogout} theme={theme}>
             <FiLogOut />
             {!sidebarCollapsed && 'Logout'}
           </LogoutButton>
         </UserSection>
       </Sidebar>
 
-      <MainContent>
-        <Header>
-          <PageTitle>{getPageTitle()}</PageTitle>
+      <MainContent theme={theme}>
+        <Header theme={theme}>
+          <PageTitle theme={theme}>{getPageTitle()}</PageTitle>
           <HeaderActions>
-            <ActionButton>
+            <ActionButton onClick={handleSettingsClick} theme={theme}>
               <FiSettings />
               Settings
             </ActionButton>
@@ -364,6 +529,111 @@ const Layout = ({ children }) => {
           {children}
         </Content>
       </MainContent>
+
+      <AnimatePresence>
+        {settingsOpen && (
+          <ModalOverlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleCloseSettings}
+          >
+            <SettingsModal
+              theme={theme}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ModalHeader>
+                <ModalTitle theme={theme}>Settings</ModalTitle>
+                <CloseButton onClick={handleCloseSettings} theme={theme}>
+                  <FiX />
+                </CloseButton>
+              </ModalHeader>
+
+              <SettingsSection>
+                <SectionTitle theme={theme}>
+                  <FiSettings />
+                  Appearance
+                </SectionTitle>
+                <SettingItem theme={theme}>
+                  <SettingInfo>
+                    <SettingIcon theme={theme}>
+                      {theme === 'dark' ? <FiMoon /> : <FiSun />}
+                    </SettingIcon>
+                    <SettingDetails>
+                      <SettingName theme={theme}>Dark Theme</SettingName>
+                      <SettingDescription theme={theme}>Switch between light and dark mode</SettingDescription>
+                    </SettingDetails>
+                  </SettingInfo>
+                  <ToggleSwitch
+                    active={theme === 'dark'}
+                    onClick={toggleTheme}
+                    theme={theme}
+                  />
+                </SettingItem>
+              </SettingsSection>
+
+              <SettingsSection>
+                <SectionTitle theme={theme}>
+                  <FiBell />
+                  Notifications
+                </SectionTitle>
+                <SettingItem theme={theme}>
+                  <SettingInfo>
+                    <SettingIcon theme={theme}>
+                      <FiBell />
+                    </SettingIcon>
+                    <SettingDetails>
+                      <SettingName theme={theme}>Push Notifications</SettingName>
+                      <SettingDescription theme={theme}>Receive notifications for new matches</SettingDescription>
+                    </SettingDetails>
+                  </SettingInfo>
+                  <ToggleSwitch active={true} theme={theme} />
+                </SettingItem>
+              </SettingsSection>
+
+              <SettingsSection>
+                <SectionTitle theme={theme}>
+                  <FiShield />
+                  Privacy & Security
+                </SectionTitle>
+                <SettingItem theme={theme}>
+                  <SettingInfo>
+                    <SettingIcon theme={theme}>
+                      <FiShield />
+                    </SettingIcon>
+                    <SettingDetails>
+                      <SettingName theme={theme}>Profile Visibility</SettingName>
+                      <SettingDescription theme={theme}>Control who can see your profile</SettingDescription>
+                    </SettingDetails>
+                  </SettingInfo>
+                  <ToggleSwitch active={false} theme={theme} />
+                </SettingItem>
+              </SettingsSection>
+
+              <SettingsSection>
+                <SectionTitle theme={theme}>
+                  <FiHelpCircle />
+                  Support
+                </SectionTitle>
+                <SettingItem theme={theme}>
+                  <SettingInfo>
+                    <SettingIcon theme={theme}>
+                      <FiHelpCircle />
+                    </SettingIcon>
+                    <SettingDetails>
+                      <SettingName theme={theme}>Help & Support</SettingName>
+                      <SettingDescription theme={theme}>Get help with your account</SettingDescription>
+                    </SettingDetails>
+                  </SettingInfo>
+                </SettingItem>
+              </SettingsSection>
+            </SettingsModal>
+          </ModalOverlay>
+        )}
+      </AnimatePresence>
     </LayoutContainer>
   );
 };
