@@ -1,0 +1,27 @@
+[build]
+  base = "client"
+  publish = "build"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  base = "client"
+  command = "npm start"
+  port = 3000
+  publish = "build"
+
+# Demo-specific settings
+[context.production.environment]
+  REACT_APP_DEMO_MODE = "true"
+  REACT_APP_API_URL = "https://rchxtype-demo-api.vercel.app"
+
+[context.deploy-preview.environment]
+  REACT_APP_DEMO_MODE = "true"
+  REACT_APP_API_URL = "https://rchxtype-demo-api.vercel.app" 
